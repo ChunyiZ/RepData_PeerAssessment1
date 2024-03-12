@@ -23,9 +23,45 @@ output:
   if(!file.exists("activity.csv"))
     unzip(filename)
 ```
-## What is mean total number of steps taken per day?
-## a 
+### Load CSV data
 
+```{r}
+  data <- read.csv("activity.csv")
+  #data$date <- as.Date(data$date)
+```
+
+## Total number of steps taken each day histagram
+
+### Process the data by day level
+```{r, message=FALSE}
+
+  library(ggplot2)
+  library(dplyr)
+
+```
+
+```{r}
+  data_by_day <- data %>% 
+    group_by(date) %>%
+    summarise(steps = sum (steps))
+```
+
+### Draw the histgram
+
+```{r}
+
+ggplot(data_by_day, aes(x=steps)) + 
+  geom_histogram(binwidth = 800, na.rm = TRUE, color = "darkblue", fill = "lightblue") +
+  labs(title = "Total Steps Each Day")
+```  
+
+### Mean and Median total number of steps taken per day
+
+```{r}
+
+  summary(data_by_day$steps)
+
+```
 
 ## What is the average daily activity pattern?
 
