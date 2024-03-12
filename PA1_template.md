@@ -27,7 +27,7 @@ output:
     unzip(filename)
 ```
 ## What is mean total number of steps taken per day?
-
+## a 
 
 
 ## What is the average daily activity pattern?
