@@ -74,8 +74,39 @@ ggplot(data_by_day, aes(x=steps)) +
 ```
 
 ## What is the average daily activity pattern?
+### Process the data by interval level
+
+```r
+  data_by_interval <- data %>% 
+    group_by(interval) %>%
+    summarise(steps = mean(steps, na.rm = TRUE))
+```
+
+### Plot the line 
 
 
+```r
+  ggplot(data_by_interval, aes(x=interval, y=steps, group = 1))+
+  geom_line(color = "darkblue")+
+  ggtitle("Interval vs Steps Across Days")+
+  labs(x="Time Interval",y="Avearge Steps")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+
+### Find the interval that has the max average steps
+
+```r
+maxinterval <- data_by_interval %>%
+    slice_max(steps) %>%
+    pull(interval)
+
+print(maxinterval)
+```
+
+```
+## [1] 835
+```
 
 ## Imputing missing values
 
