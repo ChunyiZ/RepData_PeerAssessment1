@@ -110,6 +110,57 @@ print(maxinterval)
 
 ## Imputing missing values
 
+### Find the total number of NA in original data set
 
+
+```r
+print("Total missing values in the dataset is")
+```
+
+```
+## [1] "Total missing values in the dataset is"
+```
+
+```r
+sum(is.na(data$steps))
+```
+
+```
+## [1] 2304
+```
+
+### Fill the missing data, use 5 min interval avg to fill the missing value
+
+
+
+```r
+data_impute <- data
+
+data_impute <- data_impute %>% group_by(interval) %>% mutate(steps = ifelse(is.na(steps), mean(steps,na.rm =TRUE),steps))
+
+sum(is.na(data_impute))
+```
+
+```
+## [1] 0
+```
+
+### Draw the histgram
+
+
+```r
+  data_impute_by_day <- data_impute %>% 
+    group_by(date) %>%
+    summarise(steps = sum (steps))
+```
+
+
+```r
+ggplot(data_impute_by_day, aes(x=steps)) + 
+  geom_histogram(binwidth = 500, na.rm = TRUE, color = "darkblue", fill = "lightblue") +
+  labs(title = "Total Steps Each Day")
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 ## Are there differences in activity patterns between weekdays and weekends?

@@ -102,21 +102,34 @@ sum(is.na(data$steps))
 
 ### Fill the missing data, use 5 min interval avg to fill the missing value
 
+
 ```{r}
 data_impute <- data
 
-for (i in data_by_interval){
-  data_impute[data_impute$interval == i & is.na(data_impute$steps), ]$steps <-data_by_interval$steps[data_by_interval$interval == i]
-}
+data_impute <- data_impute %>% group_by(interval) %>% mutate(steps = ifelse(is.na(steps), mean(steps,na.rm =TRUE),steps))
 
+sum(is.na(data_impute))
 ```
 
 ### Draw the histgram
 
 ```{r}
+  data_impute_by_day <- data_impute %>% 
+    group_by(date) %>%
+    summarise(steps = sum (steps))
+```
 
-ggplot(data_impute, aes(x=steps)) + 
-  geom_histogram(binwidth = 30, na.rm = TRUE, color = "darkblue", fill = "lightblue") +
+```{r}
+
+ggplot(data_impute_by_day, aes(x=steps)) + 
+  geom_histogram(binwidth = 500, na.rm = TRUE, color = "darkblue", fill = "lightblue") +
   labs(title = "Total Steps Each Day")
 ```  
+
 ## Are there differences in activity patterns between weekdays and weekends?
+```{r}
+weekdays1 <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+
+data_impute_by_day <- data_impute_by_day %>% mutate (date = as.Date(date)) %>% mutate(datenew = ifelse(weekdays(date) %in% weekdays1, 'Weekdays','Weekend'))
+
+```
