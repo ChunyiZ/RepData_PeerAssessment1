@@ -164,3 +164,33 @@ ggplot(data_impute_by_day, aes(x=steps)) +
 ![](PA1_template_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
 
 ## Are there differences in activity patterns between weekdays and weekends?
+### Create "Weekend" & "Weekdays" factors
+
+```r
+weekdays1 <- c('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday')
+
+data_impute_by_day <- data_impute_by_day %>% mutate (date = as.Date(date)) %>% mutate(datenew = ifelse(weekdays(date) %in% weekdays1, 'Weekdays','Weekend'))
+```
+
+### Plot the linegrame
+
+
+```r
+g <- ggplot(data_impute_by_day,aes(x=date, y=steps))+geom_line(color = "darkblue")+
+     facet_wrap(~datenew, ncol = 1)
+
+
+g
+```
+
+![](PA1_template_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
+
+
+```r
+print("Conclusion - people tend to walk more during weekdays.")
+```
+
+```
+## [1] "Conclusion - people tend to walk more during weekdays."
+```
